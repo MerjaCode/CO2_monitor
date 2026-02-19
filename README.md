@@ -11,6 +11,17 @@ OLED_CO2_RedIoT_096_SD5_10sec & ...min have...
   STATUS: reboots fixed (DIO mode). 
   FIXING: SD Detection. Trying auto-switch between Pin 10 and Pin 5.
 
+  LIBRARIES NEEDED:
+
+    #include <Arduino.h>
+    #include <pas-co2-ino.hpp>
+    #include <Wire.h>
+    #include <Adafruit_GFX.h>
+    #include <Adafruit_SSD1306.h>
+    #include <SPI.h>
+    #include <SD.h>
+    -------------------------------
+
   OLED_CO2_RedIoT_096_SD5_10sec does 10 sec updates whereas OLED_CO2_RedIoT_096_SD5_10sec_min does 10 sec updates for the first ____ min, then 10 minute updates thereafter, using millis, so good for 49 ish days before rollover.
 
 FUTURE....
