@@ -28,7 +28,7 @@ bool useSD = true;
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 // SD Configuration
-const char* fileName = "/co2_log.csv";
+const char* fileName = "/co2a_log.csv";
 bool sdAvailable = false; 
 int activeCS = 10; 
 
