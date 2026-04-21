@@ -1,0 +1,7 @@
+// need to add this ssid implementation - more to do 8/10/2024 beyond just these lines - see GIT.
+// const char *ssids[] = {"Granmamutter", "NETGEAR47", "Merja2015", "SCI", "ATT-WIFI-8681", "MFI-LONGRANGE-01", "Brooks TMOBILE"};
+// const char *pwds[] = {"Granmamutter", "slowhippo937", "sillycheese9", "", "78061148", "59483", "brookschaos1"};
+// const String tags[] = {"Farm_Shop", "ChuckNet", "Chucks_House", "SRMS", "Hotspot", "Farm", "Carstens_House"};
+
+const char* ssid = "ATT-WIFI-8681"; //Merja2015,SCI,ATT-WIFI-8681
+const char* password = "78061148";  //sillycheese9," ",78061148

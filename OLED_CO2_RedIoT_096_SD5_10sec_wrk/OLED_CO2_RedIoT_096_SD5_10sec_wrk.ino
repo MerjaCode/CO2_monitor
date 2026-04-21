@@ -104,14 +104,43 @@ void setup() {
     }
     display.display();
 
-    // 3. Initialize SD Card
+  /*  // 3. Initialize SD Card
     if (useSD) {
         Serial.println("Starting SPI Bus (18, 19, 23)...");
         SPI.begin(18, 19, 23); 
         yield();
-        delay(500);
+        delay(500); */
 
-        // Try Pin 10 First
+        // --- Inside Setup ---
+     if (useSD) {
+    Serial.println("Starting SPI Bus (18, 19, 23)...");
+    SPI.begin(18, 19, 23); 
+    delay(100);
+
+    // Try Pin 5 FIRST (It's safer/non-flash)
+    if (trySDInit(5)) {
+        activeCS = 5;
+        sdAvailable = true;
+        Serial.println("SUCCESS: SD Card on GPIO 5");
+    } 
+    // Only try Pin 10 if Pin 5 failed
+    else {
+        Serial.println("GPIO 5 Failed. Waiting before trying GPIO 10...");
+        delay(500); 
+        if (trySDInit(10)) {
+            activeCS = 10;
+            sdAvailable = true;
+            Serial.println("SUCCESS: SD Card on GPIO 10");
+        }
+    }
+
+    if (!sdAvailable) {
+        Serial.println("FATAL: No SD Card found on 5 or 10.");
+        display.println("SD: NOT FOUND");
+    }
+}
+
+     /*   // Try Pin 10 First
         if (trySDInit(10)) {
             activeCS = 10;
             sdAvailable = true;
@@ -122,7 +151,7 @@ void setup() {
             activeCS = 5;
             sdAvailable = true;
             Serial.println("SD Card found on GPIO 5!");
-        }
+        }  */
 
         if (!sdAvailable) {
             Serial.println("SD Card NOT found on Pin 10 or Pin 5.");

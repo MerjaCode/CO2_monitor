@@ -1,7 +1,7 @@
 /*
   XENSIV PAS CO2 Logger with OLED and SD Card
   Hardware: 
-  - SparkFun IoT ESP32 RedBoard
+  - SparkFun IoT ESP32 RedBoard - EVEN ON REDBOARD, hold down BOOT until "connecting"
   - XENSIV PAS CO2 Sensor (I2C)
   - 0.96" SSD1306 OLED (I2C)
   - Built-in microSD slot (Auto-detecting Chip Select: GPIO 10 or 5)
@@ -39,7 +39,7 @@ int activeCS = 10;
 // Dynamic Timing Constants
 #define FAST_INTERVAL_MS 10000    // 10 seconds
 #define SLOW_INTERVAL_MS 600000   // 10 minutes (600,000 ms)
-#define THRESHOLD_MS 300000       // 5 minutes (300,000 ms)
+#define THRESHOLD_MS 600000       // 5 minutes (300,000 ms) changed to 10- min to see how it comes down
 
 PASCO2Ino co2Sensor;
 int16_t co2Level;
@@ -115,7 +115,36 @@ void setup() {
         yield();
         delay(500);
 
+          // --- Inside Setup ---
+if (useSD) {
+    Serial.println("Starting SPI Bus (18, 19, 23)...");
+    SPI.begin(18, 19, 23); 
+    delay(100);
+
+    // Try Pin 5 FIRST (It's safer/non-flash)
+    if (trySDInit(5)) {
+        activeCS = 5;
+        sdAvailable = true;
+        Serial.println("SUCCESS: SD Card on GPIO 5");
+    } 
+    // Only try Pin 10 if Pin 5 failed
+    else {
+        Serial.println("GPIO 5 Failed. Waiting before trying GPIO 10...");
+        delay(500); 
         if (trySDInit(10)) {
+            activeCS = 10;
+            sdAvailable = true;
+            Serial.println("SUCCESS: SD Card on GPIO 10");
+        }
+    }
+
+    if (!sdAvailable) {
+        Serial.println("FATAL: No SD Card found on 5 or 10.");
+        display.println("SD: NOT FOUND");
+    }
+}
+
+      /*  if (trySDInit(10)) {
             activeCS = 10;
             sdAvailable = true;
             Serial.println("SD Card found on GPIO 10!");
@@ -124,7 +153,7 @@ void setup() {
             activeCS = 5;
             sdAvailable = true;
             Serial.println("SD Card found on GPIO 5!");
-        }
+        } */
 
         if (!sdAvailable) {
             Serial.println("SD Card NOT found on Pin 10 or Pin 5.");
